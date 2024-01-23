@@ -1,26 +1,38 @@
 ---
 # tasks file for nfs-root-install
 
+- name: Check if /mnt/nfs_share/diskless/root/Rocky9Install exists
+  ansible.builtin.stat:
+    path: /mnt/nfs_share/diskless/root/Rocky9Install
+  register: nfs_root_install
+
 - name: Install the rocky9 OS to /mnt/nfs_share/diskless/root/Rocky9Install
   ansible.builtin.command:
-    cmd: dnf install @Base kernel dracut-network nfs-utils --installroot=/mnt/nfs_share/diskless/root/Rocky9Install --releasever=/
-    creates: /mnt/nfs_share/diskless/root/Rocky9Install/usr
+    cmd: dnf install -y @Base kernel dracut-network nfs-utils --installroot=/mnt/nfs_share/diskless/root/Rocky9Install --releasever=/
+  when: not nfs_root_install.stat.exists
 
 - name: Generate SSH key for root
   ansible.builtin.openssh_keypair:
     path: "/root/.ssh/id_rsa"
     state: present
 
+- name: Slurp the public key file
+  ansible.builtin.slurp:
+    src: "/root/.ssh/id_rsa.pub"
+  register: ssh_public_key
+
+- name: Set public key content as fact
+  ansible.builtin.set_fact:
+    public_key_content: "{{ ssh_public_key['content'] | b64decode }}"
+
 - name: Ensure public key is in authorized_keys
   ansible.builtin.lineinfile:
     path: "/root/.ssh/authorized_keys"
-    line: "{{ lookup('file', '/root/.ssh/id_rsa.pub') }}"
+    line: "{{ public_key_content }}"
     create: yes
 
 - name: Synchronize directories using rsync
   ansible.builtin.command:
-    cmd: >
-      rsync -a -e ssh --exclude='/proc/' --exclude='/sys/'
-      vcnfsroot:/ /mnt/nfs_share/diskless/root/Rocky9Install/
+    cmd: rsync -a -e ssh --exclude='/proc/' --exclude='/sys/' vcnfsroot:/ /mnt/nfs_share/diskless/root/Rocky9Install/
   delegate_to: localhost
 
