@@ -23,7 +23,7 @@
 - name: Configure NFS exports
   ansible.builtin.lineinfile:
     path: /etc/exports
-    line: '/mnt/nfs_shares/ 192.168.1.0/24(rw,sync,no_all_squash,no_root_squash)'
+    line: '/mnt/nfs_shares/ 192.168.57.0/24(rw,sync,no_all_squash,no_root_squash)'
     create: true
   become: true
 

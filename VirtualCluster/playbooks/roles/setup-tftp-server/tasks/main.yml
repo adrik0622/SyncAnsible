@@ -1,0 +1,41 @@
+---
+- name: Install TFTP Server and Syslinux
+  ansible.builtin.package:
+    name: 
+      - tftp-server
+      - syslinux
+    state: present
+
+- name: Copy syslinux files to tftpboot
+  ansible.builtin.copy:
+    src: "/usr/share/syslinux/{{ item }}"
+    dest: "/var/lib/tftpboot/{{ item }}"
+  loop:
+    - pxelinux.0
+    - ldlinux.c32
+    - libcom32.c32
+    - vesamenu.c32
+    - memdisk
+
+- name: Create directory /var/lib/tftpboot/pxelinux
+  ansible.builtin.file:
+    path: /var/lib/tftpboot/pxelinux
+    state: directory
+
+- name: Move pxelinux.0 to /var/lib/tftpboot/pxelinux
+  ansible.builtin.command:
+    cmd: mv /var/lib/tftpboot/pxelinux.0 /var/lib/tftpboot/pxelinux/pxelinux.0
+    removes: /var/lib/tftpboot/pxelinux.0
+
+- name: Add firewall exception for TFTP
+  ansible.builtin.firewalld:
+    service: tftp
+    permanent: yes
+    state: enabled
+
+- name: Enable and start TFTP service
+  ansible.builtin.service:
+    name: tftp.service
+    enabled: yes
+    state: started
+

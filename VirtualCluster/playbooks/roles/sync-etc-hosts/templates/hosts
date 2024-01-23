@@ -1,6 +1,10 @@
 127.0.0.1   localhost localhost.localdomain localhost4 localhost4.localdomain4
 ::1         localhost localhost.localdomain localhost6 localhost6.localdomain6
 
-# Virtual Miner Environment Hosts
-192.168.1.47 Shinovar
-192.168.1.28 worker1
+# Virtual Cluster Environment Hosts
+192.168.57.101 vcworker1
+192.168.57.102 vcrm
+192.168.57.103 vcworker2
+192.168.57.104 vcnfsroot
+192.168.57.105 headhunter
+192.168.57.110 testbox

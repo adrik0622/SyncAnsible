@@ -1,5 +1,5 @@
 - name: Secure servers by setting up fail2ban
-  hosts: other
+  hosts: vcnfsroot
   become: true
   roles:
     - fail2ban-setup

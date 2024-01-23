@@ -1,0 +1,6 @@
+---
+# handlers file for setup-dhcp-server
+- name: restart dhcp server
+  ansible.builtin.service:
+    name: dhcpd  # or isc-dhcp-server, depending on your distribution
+    state: restarted

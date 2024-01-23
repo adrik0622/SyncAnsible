@@ -1,0 +1,26 @@
+---
+# tasks file for nfs-root-install
+
+- name: Install the rocky9 OS to /mnt/nfs_share/diskless/root/Rocky9Install
+  ansible.builtin.command:
+    cmd: dnf install @Base kernel dracut-network nfs-utils --installroot=/mnt/nfs_share/diskless/root/Rocky9Install --releasever=/
+    creates: /mnt/nfs_share/diskless/root/Rocky9Install/usr
+
+- name: Generate SSH key for root
+  ansible.builtin.openssh_keypair:
+    path: "/root/.ssh/id_rsa"
+    state: present
+
+- name: Ensure public key is in authorized_keys
+  ansible.builtin.lineinfile:
+    path: "/root/.ssh/authorized_keys"
+    line: "{{ lookup('file', '/root/.ssh/id_rsa.pub') }}"
+    create: yes
+
+- name: Synchronize directories using rsync
+  ansible.builtin.command:
+    cmd: >
+      rsync -a -e ssh --exclude='/proc/' --exclude='/sys/'
+      vcnfsroot:/ /mnt/nfs_share/diskless/root/Rocky9Install/
+  delegate_to: localhost
+

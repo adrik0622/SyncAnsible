@@ -1,0 +1,16 @@
+---
+- name: Install DHCP server
+  ansible.builtin.package:
+    name: dhcp-server
+    state: present
+
+- name: Deploy DHCP Server Configuration
+  ansible.builtin.copy:
+    src: dhcpconf.template
+    dest: /etc/dhcp/dhcpd.conf
+    owner: root
+    group: root
+    mode: '0644'
+  notify:
+    - restart dhcp server
+    

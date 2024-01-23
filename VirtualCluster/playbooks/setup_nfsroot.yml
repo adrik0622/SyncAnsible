@@ -1,0 +1,34 @@
+---
+- hosts: nfsserver
+  become: yes
+  tasks:
+    - name: Ensure NFS share directories are present
+      ansible.builtin.file:
+        path: "/mnt/nfs_share/{{ item }}"
+        state: directory
+      loop:
+        - diskless
+        - src
+        - obj
+        - home
+        - bin
+
+    - name: Ensure subdirectories under /mnt/nfs_share/diskless are present
+      ansible.builtin.file:
+        path: "/mnt/nfs_share/diskless/{{ item }}"
+        state: directory
+      loop:
+        - root
+        - snapshot
+        - archives
+
+- hosts: nfsserver
+  name: Configure firewalld for NFS services and configure device to be an NFS server
+  become: true
+  roles:
+    - nfsfirewall
+    - nfs-server-setup
+    - setup-dhcp-server
+    - setup-tftp-server
+    - nfs-root-install
+
