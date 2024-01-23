@@ -1,0 +1,6 @@
+- name: Synchronize /etc/bashrc across nodes
+  template: 
+     src: bashrc.template
+     dest: /etc/bashrc
+     backup: yes
+  become: true

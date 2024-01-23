@@ -1,0 +1,6 @@
+127.0.0.1   localhost localhost.localdomain localhost4 localhost4.localdomain4
+::1         localhost localhost.localdomain localhost6 localhost6.localdomain6
+
+# Virtual Miner Environment Hosts
+192.168.1.47 Shinovar
+192.168.1.28 worker1

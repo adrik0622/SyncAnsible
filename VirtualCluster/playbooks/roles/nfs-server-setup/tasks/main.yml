@@ -23,11 +23,17 @@
 - name: Configure NFS exports
   ansible.builtin.lineinfile:
     path: /etc/exports
-    line: '/mnt/nfs_shares/ *(rw,sync,no_all_squash,root_squash)'
+    line: '/mnt/nfs_shares/ 192.168.1.0/24(rw,sync,no_all_squash,no_root_squash)'
     create: true
   become: true
 
 - name: Export the NFS directories
   ansible.builtin.command:
     cmd: exportfs -arv
+  become: true
+
+- name: Restart NFS server
+  service:
+    name: nfs-server
+    state: restarted
   become: true

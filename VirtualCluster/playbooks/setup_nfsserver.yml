@@ -1,6 +1,6 @@
 ---
-- name: Configure firewalld for NFS services
-  hosts: other
+- name: Configure firewalld for NFS services and configure device to be an nfs server
+  hosts: nfsserver
   become: true
   roles:
     - nfsfirewall

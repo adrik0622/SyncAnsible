@@ -1,0 +1,6 @@
+---
+- hosts: nfsclients
+  become: yes
+  roles:
+    - nfs-client-setup
+

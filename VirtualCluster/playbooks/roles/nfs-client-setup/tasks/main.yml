@@ -1,2 +1,25 @@
----
-# tasks file for nfs-client-setup
+- name: Install NFS utilities
+  ansible.builtin.package:
+    name: nfs-utils
+    state: present
+
+- name: Ensure NFS client directory exists
+  file:
+    path: /mnt/client_share
+    state: directory
+
+- name: Mount the NFS share
+  mount:
+    path: /mnt/client_share
+    src: 192.168.1.47:/mnt/nfs_shares
+    fstype: nfs
+    opts: defaults
+    state: mounted
+
+- name: Make the NFS mount persistent
+  lineinfile:
+    path: /etc/fstab
+    line: '192.168.1.47:/mnt/nfs_shares /mnt/client_share nfs defaults 0 0'
+    create: yes
+    state: present
+

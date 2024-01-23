@@ -1,0 +1,5 @@
+- name: Set default home directory for new users
+  hosts: nfsclients
+  become: yes
+  roles:
+    - set-default-home
