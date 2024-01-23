@@ -1,0 +1,32 @@
+- name: Update /etc/default/useradd to set new home directory
+  lineinfile:
+    path: /etc/default/useradd
+    regexp: '^HOME='
+    line: 'HOME=/mnt/client_share/home'
+    state: present
+  become: true
+
+    # Szeth cannot be changed because he has to open a tty in order to make changes to the system
+    #- name: Change home directory for user szeth
+    #user:
+    #name: szeth
+    #home: /mnt/client_share/home
+    #move_home: yes
+    #become: true
+
+    # Cannot have directory existing for next command to run
+    #- name: Ensure new home directory exists for user adrikingston
+    #file:
+    #path: /mnt/client_share/home/adrikingston
+    #state: directory
+    #owner: adrikingston
+    #group: adrikingston
+    #mode: 0755
+    #become: true
+
+- name: Change home directory for user adrikingston
+  user:
+    name: adrikingston
+    home: /mnt/client_share/home/adrikingston
+    move_home: yes
+  become: true

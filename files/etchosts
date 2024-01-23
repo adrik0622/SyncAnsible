@@ -1,0 +1,8 @@
+127.0.0.1   localhost localhost.localdomain localhost4 localhost4.localdomain4
+::1         localhost localhost.localdomain localhost6 localhost6.localdomain6
+192.168.56.101 vcworker1
+192.168.56.102 vcrm
+192.168.56.103 vcworker2
+192.168.56.104 vcnfsroot
+192.168.56.105 headhunter
+192.168.56.110 testbox

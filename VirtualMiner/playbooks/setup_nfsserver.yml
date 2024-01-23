@@ -1,0 +1,8 @@
+---
+- name: Configure firewalld for NFS services
+  hosts: shinovar
+  become: true
+  roles:
+    - nfsfirewall
+    - nfs-server-setup
+

@@ -1,0 +1,39 @@
+---
+# tasks file for nfs-server-setup
+- name: Install nfs-utils
+  ansible.builtin.yum:
+    name: nfs-utils
+    state: present
+  become: true
+
+- name: Ensure NFS service is running and enabled
+  ansible.builtin.service:
+    name: nfs-server
+    state: started
+    enabled: true
+  become: true
+
+- name: Create NFS share directory
+  ansible.builtin.file:
+    path: /mnt/nfs_shares/
+    state: directory
+    mode: '0777'
+  become: true
+
+- name: Configure NFS exports
+  ansible.builtin.lineinfile:
+    path: /etc/exports
+    line: '/mnt/nfs_shares/ 192.168.1.0/24(rw,sync,no_all_squash,no_root_squash)'
+    create: true
+  become: true
+
+- name: Export the NFS directories
+  ansible.builtin.command:
+    cmd: exportfs -arv
+  become: true
+
+- name: name: Restart NFS server
+  service:
+    name: nfs-server
+    state: restarted
+  become: true

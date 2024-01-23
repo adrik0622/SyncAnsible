@@ -1,0 +1,8 @@
+---
+- name: Configure firewalld for NFS services
+  hosts: other
+  become: true
+  roles:
+    - nfsfirewall
+    - nfs-server-setup
+

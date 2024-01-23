@@ -1,0 +1,25 @@
+---
+# tasks file for fail2ban-setup
+- name: Install fail2ban
+  ansible.builtin.yum:
+    name: fail2ban
+    state: present
+  become: true
+
+- name: Ensure fail2ban is running and enabled
+  ansible.builtin.service:
+    name: fail2ban
+    state: started
+    enabled: true
+  become: true
+
+- name: Configure fail2ban for SSH
+  ansible.builtin.template:
+    src: 01-adri-ssh.conf
+    dest: /etc/fail2ban/jail.d/
+    owner: root
+    group: root
+    mode: '0644'
+  become: true
+  notify:
+    - restart fail2ban

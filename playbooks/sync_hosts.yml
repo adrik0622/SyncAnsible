@@ -1,0 +1,12 @@
+- name: Sync Hosts File Across All Servers
+  hosts: all
+  become: yes # becomes root
+
+  tasks:
+    - name: Copy hosts file to remote
+      copy:
+        src: /home/szeth/Ansible/files/etchosts # Source file on control node
+        dest: /etc/hosts                        # Destination on the remote node
+        owner: root                             # Set the owner of the file (optional)
+        group: root                             # Set the group of the file (optional)
+        mode: '0644'                            # Set the permissions of the file (optional)

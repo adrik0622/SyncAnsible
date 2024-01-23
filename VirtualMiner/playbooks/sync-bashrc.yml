@@ -1,0 +1,5 @@
+- name: sync bashrc for nfsclients
+  hosts: nfsclients
+  become: yes
+  roles:
+    - sync-bashrc
